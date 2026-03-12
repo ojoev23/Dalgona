@@ -4,9 +4,9 @@ import Footer from './components/Footer';
 
 function Layout(){
     return(
-      <div style={styles.layout}>
+      <div className="layout">
           <Navbar/>
-          <main style={styles.main}>
+          <main className="main">
               <Outlet/>
           </main>
           <Footer/>
@@ -14,17 +14,4 @@ function Layout(){
     );
 }
 
-const styles = {
-    layout: {
-        display: 'flex',
-        flexDirection: 'column',
-        minHeight: '100vh', // Forces the app to fill the whole screen height
-    },
-    main: {
-        flex: 1, // Takes up all remaining space
-        padding: '40px',
-        display: 'flex',
-        justifyContent: 'center', // Centers your Login box horizontally
-    }
-};
 export default Layout;
