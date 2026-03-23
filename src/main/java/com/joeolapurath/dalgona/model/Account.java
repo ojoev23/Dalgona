@@ -27,7 +27,9 @@ public class Account {
     private int age;
     @Column(nullable = false)
     private String passwordHash;
-
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role = Role.USER;
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Order> orders;
 }
