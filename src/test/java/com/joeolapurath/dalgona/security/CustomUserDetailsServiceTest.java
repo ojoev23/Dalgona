@@ -1,6 +1,7 @@
 package com.joeolapurath.dalgona.security;
 
 import com.joeolapurath.dalgona.model.Account;
+import com.joeolapurath.dalgona.model.Role;
 import com.joeolapurath.dalgona.repository.AccountRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,6 +31,7 @@ class CustomUserDetailsServiceTest {
                 .accountId(1L)
                 .email("john@example.com")
                 .passwordHash("hashedPassword123")
+                .role(Role.ADMIN)
                 .build();
 
         when(accountRepository.findByEmail("john@example.com")).thenReturn(Optional.of(account));
@@ -39,7 +41,9 @@ class CustomUserDetailsServiceTest {
         assertNotNull(userDetails);
         assertEquals("john@example.com", userDetails.getUsername());
         assertEquals("hashedPassword123", userDetails.getPassword());
-        assertTrue(userDetails.getAuthorities().isEmpty());
+        assertEquals(1, userDetails.getAuthorities().size());
+        assertTrue(userDetails.getAuthorities().stream()
+                .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN")));
     }
 
     @Test

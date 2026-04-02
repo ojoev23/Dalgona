@@ -125,7 +125,6 @@ public class UmbrellaService {
         OrderResponse.OrderResponseBuilder builder = OrderResponse.builder()
                 .orderId(order.getOrderId())
                 .umbrellaId(order.getUmbrella().getUmbrellaId())
-                .umbrellaName(order.getUmbrella().getName())
                 .pickupStationId(order.getPickupStation().getStationId())
                 .pickupStationLocation(order.getPickupStation().getLocation())
                 .rentedAt(order.getRentedAt())

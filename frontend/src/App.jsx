@@ -7,8 +7,10 @@ import Layout from "./Layout.jsx";
 import Stations from "./Stations.jsx";
 import Orders from "./Orders.jsx";
 import Account from "./Account.jsx";
+import Admin from "./Admin.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import GuestRoute from "./components/GuestRoute.jsx";
+import AdminRoute from "./components/AdminRoute.jsx";
 
 function App() {
     return (
@@ -29,6 +31,10 @@ function App() {
                         <Route path="/stations" element={<Stations />} />
                         <Route path="/orders" element={<Orders />} />
                         <Route path="/account" element={<Account />} />
+                    </Route>
+
+                    <Route element={<AdminRoute />}>
+                        <Route path="/admin" element={<Admin />} />
                     </Route>
                 </Route>
             </Routes>

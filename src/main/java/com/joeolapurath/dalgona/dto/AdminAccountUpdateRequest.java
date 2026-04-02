@@ -1,17 +1,14 @@
 package com.joeolapurath.dalgona.dto;
 
-import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
-@Builder
-public class AccountResponse {
-    private Long accountId;
+@Setter
+public class AdminAccountUpdateRequest {
     private String name;
-    private String email;
     private String address;
     private String phone;
-    private int age;
+    private Integer age;
     private String role;
 }
-

@@ -4,6 +4,7 @@ import com.joeolapurath.dalgona.dto.AuthResponse;
 import com.joeolapurath.dalgona.dto.LoginRequest;
 import com.joeolapurath.dalgona.dto.RegisterRequest;
 import com.joeolapurath.dalgona.model.Account;
+import com.joeolapurath.dalgona.model.Role;
 import com.joeolapurath.dalgona.repository.AccountRepository;
 import com.joeolapurath.dalgona.security.JwtUtil;
 import org.springframework.http.ResponseEntity;
@@ -46,8 +47,10 @@ public class AuthController {
         // If at this step login was good and now store users info in memory
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtil.generateToken(authentication.getName());
+        Account account = accountRepository.findByEmail(authentication.getName())
+                .orElseThrow(() -> new RuntimeException("Account not found"));
 
-        return ResponseEntity.ok(new AuthResponse(jwt));
+        return ResponseEntity.ok(new AuthResponse(jwt, account.getRole().name()));
     }
 
     @PostMapping("/register")
@@ -58,6 +61,7 @@ public class AuthController {
         Account account = new Account();
         account.setEmail(request.getEmail());
         account.setPasswordHash(passwordEncoder.encode(request.getPassword()));
+        account.setRole(Role.USER);
         accountRepository.save(account);
 
         return ResponseEntity.ok("Registered User");

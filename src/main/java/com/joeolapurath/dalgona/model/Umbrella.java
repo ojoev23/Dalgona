@@ -15,8 +15,6 @@ public class Umbrella {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long umbrellaId;
 
-    @Column(nullable = false)
-    private String name;
 
     @Column(nullable = false)
     @Builder.Default

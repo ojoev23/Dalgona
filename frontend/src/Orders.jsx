@@ -13,7 +13,7 @@ function Orders() {
         try {
             const res = type === 'active' ? await getActiveRentals() : await getOrders();
             setOrders(res.data);
-        } catch (err) {
+        } catch {
             setError('Failed to load orders.');
         } finally {
             setLoading(false);
@@ -72,7 +72,7 @@ function Orders() {
                             {orders.map((o) => (
                                 <tr key={o.orderId}>
                                     <td>{o.orderId}</td>
-                                    <td>#{o.umbrellaId}{o.umbrellaName ? ` (${o.umbrellaName})` : ''}</td>
+                                    <td>#{o.umbrellaId}</td>
                                     <td>{o.pickupStationLocation}</td>
                                     <td>{o.returnStationLocation || '—'}</td>
                                     <td>{formatDate(o.rentedAt)}</td>

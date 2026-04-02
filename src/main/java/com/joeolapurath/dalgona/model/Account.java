@@ -29,6 +29,7 @@ public class Account {
     private String passwordHash;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
+    @Builder.Default
     private Role role = Role.USER;
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Order> orders;

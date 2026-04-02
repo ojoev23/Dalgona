@@ -13,7 +13,11 @@ public interface StationSlotRepository extends JpaRepository<StationSlot, Long> 
 
     Optional<StationSlot> findByStationAndSlotIndex(Station station, int slotIndex);
 
+    Optional<StationSlot> findFirstByStationAndUmbrellaIsNullOrderBySlotIndexDesc(Station station);
+
     Optional<StationSlot> findFirstByStationAndUmbrellaIsNullOrderBySlotIndexAsc(Station station);
+
+    boolean existsByUmbrella(com.joeolapurath.dalgona.model.Umbrella umbrella);
 
     long countByStationAndUmbrellaIsNotNull(Station station);
 

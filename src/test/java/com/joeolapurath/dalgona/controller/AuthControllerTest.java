@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.joeolapurath.dalgona.dto.LoginRequest;
 import com.joeolapurath.dalgona.dto.RegisterRequest;
 import com.joeolapurath.dalgona.model.Account;
+import com.joeolapurath.dalgona.model.Role;
 import com.joeolapurath.dalgona.repository.AccountRepository;
 import com.joeolapurath.dalgona.security.CustomUserDetailsService;
 import com.joeolapurath.dalgona.security.JwtUtil;
@@ -22,6 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -59,6 +61,9 @@ class AuthControllerTest {
         when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
                 .thenReturn(authentication);
         when(jwtUtil.generateToken("john@example.com")).thenReturn("test-jwt-token");
+        when(accountRepository.findByEmail("john@example.com")).thenReturn(Optional.of(
+                Account.builder().email("john@example.com").role(Role.ADMIN).build()
+        ));
 
         LoginRequest request = new LoginRequest("john@example.com", "password123");
 
@@ -67,7 +72,8 @@ class AuthControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.token").value("test-jwt-token"));
+                .andExpect(jsonPath("$.token").value("test-jwt-token"))
+                .andExpect(jsonPath("$.role").value("ADMIN"));
     }
 
     @Test
@@ -88,7 +94,7 @@ class AuthControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string("Registered User"));
 
-        verify(accountRepository).save(any(Account.class));
+        verify(accountRepository).save(argThat(account -> account.getRole() == Role.USER));
     }
 
     @Test

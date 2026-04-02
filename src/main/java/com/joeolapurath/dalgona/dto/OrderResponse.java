@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 public class OrderResponse {
     private Long orderId;
     private Long umbrellaId;
-    private String umbrellaName;
     private Long pickupStationId;
     private String pickupStationLocation;
     private Long returnStationId;

@@ -1,24 +1,37 @@
 import { useState, useEffect } from 'react';
-import { getStations, rentUmbrella, returnUmbrella } from './services/api';
+import { getStations, getActiveRentals, rentUmbrella, returnUmbrella } from './services/api';
 
 function Stations() {
     const [stations, setStations] = useState([]);
+    const [activeRental, setActiveRental] = useState(null);
     const [message, setMessage] = useState('');
     const [isError, setIsError] = useState(false);
-    const [returnForm, setReturnForm] = useState({ stationId: '', umbrellaId: '' });
 
     const fetchStations = async () => {
         try {
             const res = await getStations();
             setStations(res.data);
-        } catch (err) {
+        } catch {
             setIsError(true);
             setMessage('Failed to load stations.');
         }
     };
 
+    const fetchActiveRental = async () => {
+        try {
+            const res = await getActiveRentals();
+            // Backend enforces max 1 active rental per account.
+            setActiveRental(res.data?.[0] ?? null);
+        } catch {
+            setActiveRental(null);
+        }
+    };
+
     useEffect(() => {
-        fetchStations();
+        const loadStationsData = async () => {
+            await Promise.all([fetchStations(), fetchActiveRental()]);
+        };
+        loadStationsData();
     }, []);
 
     const handleRent = async (stationId) => {
@@ -27,23 +40,26 @@ function Stations() {
             setIsError(false);
             setMessage(`Rented umbrella #${res.data.umbrellaId} from ${res.data.pickupStationLocation}`);
             fetchStations();
+            fetchActiveRental();
         } catch (err) {
             setIsError(true);
             setMessage(err.response?.data?.message || err.response?.data || 'Rent failed.');
         }
     };
 
-    const handleReturn = async (e) => {
-        e.preventDefault();
+    const handleReturn = async (stationId) => {
+        if (!activeRental?.umbrellaId) {
+            setIsError(true);
+            setMessage('No active rental found to return.');
+            return;
+        }
+
         try {
-            const res = await returnUmbrella(
-                Number(returnForm.stationId),
-                Number(returnForm.umbrellaId)
-            );
+            const res = await returnUmbrella(stationId, activeRental.umbrellaId);
             setIsError(false);
             setMessage(`Returned umbrella #${res.data.umbrellaId} to ${res.data.returnStationLocation}`);
-            setReturnForm({ stationId: '', umbrellaId: '' });
             fetchStations();
+            fetchActiveRental();
         } catch (err) {
             setIsError(true);
             setMessage(err.response?.data?.message || err.response?.data || 'Return failed.');
@@ -53,7 +69,13 @@ function Stations() {
     return (
         <div className="page-wide">
             <h1>Stations</h1>
-            <p className="subtitle">Browse available stations and rent an umbrella</p>
+            <p className="subtitle">Browse stations, rent umbrellas, and return your active rental</p>
+
+            {activeRental && (
+                <div className="alert alert-info">
+                    Active rental: umbrella #{activeRental.umbrellaId} from {activeRental.pickupStationLocation}
+                </div>
+            )}
 
             {message && (
                 <div className={`alert ${isError ? 'alert-error' : 'alert-info'}`}>
@@ -70,7 +92,7 @@ function Stations() {
                             <th>Capacity</th>
                             <th>Occupied</th>
                             <th>Available</th>
-                            <th>Action</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -85,9 +107,17 @@ function Stations() {
                                     <button
                                         className="btn btn-primary"
                                         onClick={() => handleRent(s.stationId)}
-                                        disabled={s.available === 0}
+                                        disabled={s.available === 0 || !!activeRental}
                                     >
                                         Rent
+                                    </button>
+                                    <button
+                                        className="btn btn-outline"
+                                        onClick={() => handleReturn(s.stationId)}
+                                        disabled={!activeRental || s.available === 0}
+                                        style={{ marginLeft: '8px' }}
+                                    >
+                                        Return Here
                                     </button>
                                 </td>
                             </tr>
@@ -95,27 +125,6 @@ function Stations() {
                     </tbody>
                 </table>
             </div>
-
-            <h2 className="section-title">Return an Umbrella</h2>
-            <form onSubmit={handleReturn} className="inline-form">
-                <input
-                    className="input"
-                    type="number"
-                    placeholder="Station ID"
-                    value={returnForm.stationId}
-                    onChange={(e) => setReturnForm({ ...returnForm, stationId: e.target.value })}
-                    required
-                />
-                <input
-                    className="input"
-                    type="number"
-                    placeholder="Umbrella ID"
-                    value={returnForm.umbrellaId}
-                    onChange={(e) => setReturnForm({ ...returnForm, umbrellaId: e.target.value })}
-                    required
-                />
-                <button type="submit" className="btn btn-outline">Return</button>
-            </form>
         </div>
     );
 }

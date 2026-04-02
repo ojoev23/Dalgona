@@ -27,8 +27,8 @@ class StationTest {
 
     @Test
     void getOccupiedCount_shouldCountOccupiedSlots() {
-        Umbrella umbrella1 = Umbrella.builder().umbrellaId(1L).name("U1").build();
-        Umbrella umbrella2 = Umbrella.builder().umbrellaId(2L).name("U2").build();
+        Umbrella umbrella1 = Umbrella.builder().umbrellaId(1L).build();
+        Umbrella umbrella2 = Umbrella.builder().umbrellaId(2L).build();
 
         Station station = Station.builder()
                 .stationId(1L)
@@ -46,7 +46,7 @@ class StationTest {
 
     @Test
     void getAvailableCount_shouldReturnCapacityMinusOccupied() {
-        Umbrella umbrella = Umbrella.builder().umbrellaId(1L).name("U1").build();
+        Umbrella umbrella = Umbrella.builder().umbrellaId(1L).build();
 
         Station station = Station.builder()
                 .stationId(1L)
@@ -76,9 +76,9 @@ class StationTest {
 
     @Test
     void getAvailableCount_shouldReturnZero_whenAllFull() {
-        Umbrella u1 = Umbrella.builder().umbrellaId(1L).name("U1").build();
-        Umbrella u2 = Umbrella.builder().umbrellaId(2L).name("U2").build();
-        Umbrella u3 = Umbrella.builder().umbrellaId(3L).name("U3").build();
+        Umbrella u1 = Umbrella.builder().umbrellaId(1L).build();
+        Umbrella u2 = Umbrella.builder().umbrellaId(2L).build();
+        Umbrella u3 = Umbrella.builder().umbrellaId(3L).build();
 
         Station station = Station.builder()
                 .stationId(1L)

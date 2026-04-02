@@ -3,6 +3,7 @@ package com.joeolapurath.dalgona.service;
 import com.joeolapurath.dalgona.dto.AccountResponse;
 import com.joeolapurath.dalgona.dto.AccountUpdateRequest;
 import com.joeolapurath.dalgona.model.Account;
+import com.joeolapurath.dalgona.model.Role;
 import com.joeolapurath.dalgona.repository.AccountRepository;
 import org.springframework.stereotype.Service;
 
@@ -43,6 +44,7 @@ public class AccountService {
                 .address(account.getAddress())
                 .phone(account.getPhone())
                 .age(account.getAge())
+                .role((account.getRole() == null ? Role.USER : account.getRole()).name())
                 .build();
     }
 }

@@ -75,7 +75,7 @@ class StationControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "admin@example.com")
+    @WithMockUser(username = "admin@example.com", roles = "ADMIN")
     void createStation_shouldCreateAndReturnStation() throws Exception {
         StationResponse response = StationResponse.builder()
                 .stationId(1L).location("Park").capacity(5).occupied(0).available(5).build();

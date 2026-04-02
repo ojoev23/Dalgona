@@ -22,7 +22,6 @@ class StationSlotTest {
     void isEmpty_shouldReturnFalse_whenUmbrellaPresent() {
         Umbrella umbrella = Umbrella.builder()
                 .umbrellaId(1L)
-                .name("Test Umbrella")
                 .build();
 
         StationSlot slot = StationSlot.builder()
@@ -38,7 +37,6 @@ class StationSlotTest {
     void isEmpty_shouldReturnTrue_afterRemovingUmbrella() {
         Umbrella umbrella = Umbrella.builder()
                 .umbrellaId(1L)
-                .name("Test Umbrella")
                 .build();
 
         StationSlot slot = StationSlot.builder()

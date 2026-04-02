@@ -10,11 +10,15 @@ import java.util.Optional;
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
+    List<Order> findAllByOrderByRentedAtDesc();
+
     List<Order> findByAccountOrderByRentedAtDesc(Account account);
 
     List<Order> findByAccountAndReturnedAtIsNullOrderByRentedAtDesc(Account account);
 
     Optional<Order> findByUmbrellaAndReturnedAtIsNull(Umbrella umbrella);
+
+    boolean existsByUmbrellaAndReturnedAtIsNull(Umbrella umbrella);
 
     boolean existsByAccountAndReturnedAtIsNull(Account account);
 }

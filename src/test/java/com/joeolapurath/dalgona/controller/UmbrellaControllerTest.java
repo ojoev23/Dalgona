@@ -49,7 +49,6 @@ class UmbrellaControllerTest {
         OrderResponse response = OrderResponse.builder()
                 .orderId(1L)
                 .umbrellaId(1L)
-                .umbrellaName("Blue Umbrella")
                 .pickupStationId(1L)
                 .pickupStationLocation("Downtown")
                 .rentedAt(now)
@@ -68,7 +67,6 @@ class UmbrellaControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.orderId").value(1))
                 .andExpect(jsonPath("$.umbrellaId").value(1))
-                .andExpect(jsonPath("$.umbrellaName").value("Blue Umbrella"))
                 .andExpect(jsonPath("$.pickupStationId").value(1))
                 .andExpect(jsonPath("$.active").value(true));
     }
@@ -81,7 +79,6 @@ class UmbrellaControllerTest {
         OrderResponse response = OrderResponse.builder()
                 .orderId(1L)
                 .umbrellaId(1L)
-                .umbrellaName("Blue Umbrella")
                 .pickupStationId(1L)
                 .pickupStationLocation("Downtown")
                 .returnStationId(2L)

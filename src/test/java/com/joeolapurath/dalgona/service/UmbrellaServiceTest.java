@@ -55,7 +55,6 @@ class UmbrellaServiceTest {
 
         testUmbrella = Umbrella.builder()
                 .umbrellaId(1L)
-                .name("Blue Umbrella")
                 .inUse(false)
                 .build();
 
@@ -108,7 +107,6 @@ class UmbrellaServiceTest {
 
         assertNotNull(response);
         assertEquals(1L, response.getUmbrellaId());
-        assertEquals("Blue Umbrella", response.getUmbrellaName());
         assertEquals(1L, response.getPickupStationId());
         assertEquals("Downtown", response.getPickupStationLocation());
         assertTrue(response.isActive());

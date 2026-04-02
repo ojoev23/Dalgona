@@ -1,8 +1,9 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { isAuthenticated, logout } from "../services/api";
+import { isAdmin, isAuthenticated, logout } from "../services/api";
 function Navbar() {
     const navigate = useNavigate();
     const loggedIn = isAuthenticated();
+    const admin = isAdmin();
 
     const handleLogout = () => {
         logout();
@@ -22,6 +23,7 @@ function Navbar() {
                         <NavLink to="/stations" className={linkClass}>Stations</NavLink>
                         <NavLink to="/orders" className={linkClass}>Orders</NavLink>
                         <NavLink to="/account" className={linkClass}>Account</NavLink>
+                        {admin && <NavLink to="/admin" className={linkClass}>Admin</NavLink>}
                         <button onClick={handleLogout} className="navbar-logout">Logout</button>
                     </>
                 ) : (
